@@ -79,6 +79,7 @@ void main() {
 
 class _CallbackBookRepository implements BookRepository {
   final Future<List<SearchBook>> Function(String query, BookSource source) searchCallback;
+  final List<Book> saved = [];
 
   _CallbackBookRepository({required this.searchCallback});
 
@@ -109,4 +110,19 @@ class _CallbackBookRepository implements BookRepository {
   Future<ReaderSession?> loadReaderSession(String bookId) {
     throw UnimplementedError();
   }
+
+  @override
+  Future<Book> saveBook(Book book) async {
+    saved.removeWhere((entry) => entry.bookId == book.bookId);
+    saved.add(book);
+    return book;
+  }
+
+  @override
+  Future<void> removeBook(String bookId) async {
+    saved.removeWhere((entry) => entry.bookId == bookId);
+  }
+
+  @override
+  Future<List<Book>> loadBookshelf() async => List.unmodifiable(saved);
 }

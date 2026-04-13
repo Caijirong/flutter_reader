@@ -14,6 +14,12 @@ abstract class BookRepository {
 
   Future<String> fetchChapterContent(BookChapter chapter, BookSource source);
 
+  Future<Book> saveBook(Book book);
+
+  Future<void> removeBook(String bookId);
+
+  Future<List<Book>> loadBookshelf();
+
   Future<void> saveReaderSession(ReaderSession session);
 
   Future<ReaderSession?> loadReaderSession(String bookId);

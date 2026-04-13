@@ -120,4 +120,13 @@ class _FakeBookRepository implements BookRepository {
   Future<ReaderSession?> loadReaderSession(String bookId) {
     throw UnimplementedError();
   }
+
+  @override
+  Future<Book> saveBook(Book book) async => book;
+
+  @override
+  Future<void> removeBook(String bookId) async {}
+
+  @override
+  Future<List<Book>> loadBookshelf() async => const [];
 }
