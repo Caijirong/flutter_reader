@@ -20,8 +20,13 @@ class SourceImportController extends ChangeNotifier {
   final List<BookSource> importedSources = [];
   final Set<String> _importedIds = {};
 
-  SourceImportController({SourceJsonParser? parser})
-      : _parser = parser ?? SourceJsonParser();
+  SourceImportController({SourceJsonParser? parser, List<BookSource>? initialSources})
+      : _parser = parser ?? SourceJsonParser() {
+    if (initialSources != null) {
+      importedSources.addAll(initialSources);
+      _importedIds.addAll(initialSources.map((source) => source.id));
+    }
+  }
 
   Future<SourceImportResult> importFromText(String payload) async {
     final parseResult = _parser.parse(payload);

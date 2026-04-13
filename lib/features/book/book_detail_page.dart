@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_reader/data/models/book.dart';
+import 'package:flutter_reader/data/models/book_chapter.dart';
 import 'package:flutter_reader/features/book/book_detail_controller.dart';
 import 'package:flutter_reader/features/book/chapter_list_view.dart';
 
 class BookDetailPage extends StatefulWidget {
-  const BookDetailPage({super.key, required this.controller});
+  const BookDetailPage({
+    super.key,
+    required this.controller,
+    this.onChapterSelected,
+  });
 
   final BookDetailController controller;
+  final void Function(Book book, BookChapter chapter)? onChapterSelected;
 
   @override
   State<BookDetailPage> createState() => _BookDetailPageState();
@@ -52,17 +59,22 @@ class _BookDetailPageState extends State<BookDetailPage> {
                 const Divider(height: 24),
                 const Text('Chapters', style: TextStyle(fontWeight: FontWeight.bold)),
                 Expanded(
-                  child: ChapterListView(
-                    chapters: controller.chapters,
-                    onChapterTap: (chapter) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Selected ${chapter.title}')),
-                      );
-                    },
-                  ),
+                child: ChapterListView(
+                  chapters: controller.chapters,
+                  onChapterTap: (chapter) {
+                    final book = controller.book;
+                    if (book != null && widget.onChapterSelected != null) {
+                      widget.onChapterSelected!(book, chapter);
+                      return;
+                    }
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Selected ${chapter.title}')),
+                    );
+                  },
                 ),
-              ],
-            ),
+              ),
+            ],
+          ),
           );
         },
       ),

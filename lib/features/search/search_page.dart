@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart' hide SearchController;
 import 'package:flutter_reader/features/search/search_controller.dart';
 import 'package:flutter_reader/features/search/search_result_tile.dart';
+import 'package:flutter_reader/data/models/search_book.dart';
 
 class SearchPage extends StatefulWidget {
-  const SearchPage({super.key, required this.controller});
+  const SearchPage({
+    super.key,
+    required this.controller,
+    this.onBookSelected,
+  });
 
   final SearchController controller;
+  final void Function(SearchBook book)? onBookSelected;
 
   @override
   State<SearchPage> createState() => _SearchPageState();
@@ -66,7 +72,10 @@ class _SearchPageState extends State<SearchPage> {
                 itemCount: widget.controller.sourceResults.length,
                 itemBuilder: (context, index) {
                   final result = widget.controller.sourceResults[index];
-                  return SearchResultTile(result: result);
+                return SearchResultTile(
+                  result: result,
+                  onBookTap: (book) => widget.onBookSelected?.call(book),
+                );
                 },
               );
             },
